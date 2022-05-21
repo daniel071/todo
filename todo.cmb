@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
+<cambalache-project version="0.8.2" target_tk="gtk-4.0">
+  <ui>
+	(1,None,"todo.ui","todo.ui",None,None,None,None,None,None)
+  </ui>
+  <object>
+	(1,1,"GtkWindow","window1",None,None,None,None,None),
+	(1,2,"GtkLabel",None,1,None,None,None,-1)
+  </object>
+  <object_property>
+	(1,2,"GtkLabel","label","Hello, world!",None,None,None,None)
+  </object_property>
+</cambalache-project>
