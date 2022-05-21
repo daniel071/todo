@@ -1,14 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
-<cambalache-project version="0.8.2" target_tk="gtk-4.0">
+<cambalache-project version="0.9.1" target_tk="gtk-4.0">
   <ui>
 	(1,None,"todo.ui","todo.ui",None,None,None,None,None,None)
   </ui>
   <object>
-	(1,1,"GtkWindow","window1",None,None,None,None,None),
-	(1,2,"GtkLabel",None,1,None,None,None,-1)
+	(1,1,"GtkWindow","MainWindow",None,None,None,None,None),
+	(1,2,"GtkHeaderBar","headerbar",1,None,"titlebar",None,-1),
+	(1,3,"GtkGrid",None,1,None,None,None,None),
+	(1,4,"GtkButton",None,2,None,"start",None,None),
+	(1,7,"GtkButton",None,2,None,"end",None,2),
+	(1,8,"GtkButton",None,2,None,"end",None,2),
+	(1,10,"AdwViewSwitcher",None,2,None,"title",None,None),
+	(1,11,"GtkSpinner",None,3,None,None,None,None),
+	(1,12,"GtkAboutDialog","aboutMenu",None,None,None,None,None),
+	(1,13,"GtkButton","aboutBtn",2,None,"end",None,None)
   </object>
   <object_property>
-	(1,2,"GtkLabel","label","Hello, world!",None,None,None,None)
+	(1,3,"GtkWidget","halign","center",None,None,None,None,None),
+	(1,3,"GtkWidget","valign","center",None,None,None,None,None),
+	(1,4,"GtkButton","icon-name","list-add",None,None,None,None,None),
+	(1,7,"GtkButton","icon-name","object-select-symbolic",None,None,None,None,None),
+	(1,8,"GtkButton","icon-name","search",None,None,None,None,None),
+	(1,11,"GtkSpinner","spinning","True",None,None,None,None,None),
+	(1,11,"GtkWidget","halign","center",None,None,None,None,None),
+	(1,12,"GtkAboutDialog","comments","A simple Todo app",None,None,None,None,None),
+	(1,12,"GtkAboutDialog","copyright","Daniel Pavela",None,None,None,None,None),
+	(1,12,"GtkAboutDialog","license","MIT License\n\nCopyright (c) 2022 Daniel\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n\n",None,None,None,None,None),
+	(1,12,"GtkAboutDialog","license-type","mit-x11",None,None,None,None,None),
+	(1,12,"GtkAboutDialog","logo-icon-name","gnome-todo",None,None,None,None,None),
+	(1,12,"GtkAboutDialog","program-name","Todo",None,None,None,None,None),
+	(1,12,"GtkAboutDialog","version","v0.1",None,None,None,None,None),
+	(1,12,"GtkAboutDialog","website","https://github.com/daniel071/todo",None,None,None,None,None),
+	(1,12,"GtkAboutDialog","wrap-license","True",None,None,None,None,None),
+	(1,12,"GtkWindow","default-width","7",None,None,None,None,None),
+	(1,13,"GtkButton","icon-name","open-menu-symbolic",None,None,None,None,None)
   </object_property>
+  <object_layout_property>
+	(1,3,11,"GtkGridLayoutChild","column","0",None,None,None,None),
+	(1,3,11,"GtkGridLayoutChild","column-span","1",None,None,None,None),
+	(1,3,11,"GtkGridLayoutChild","row","0",None,None,None,None),
+	(1,3,11,"GtkGridLayoutChild","row-span","1",None,None,None,None)
+  </object_layout_property>
 </cambalache-project>

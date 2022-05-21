@@ -1,13 +1,88 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!-- Created with Cambalache 0.8.2 -->
+<!-- Created with Cambalache 0.9.1 -->
 <interface>
   <!-- interface-name todo.ui -->
-  <requires lib="gtk" version="4.0"/>
-  <object class="GtkWindow" id="window1">
-    <child>
-      <object class="GtkLabel">
-        <property name="label">Hello, world!</property>
+  <requires lib="gtk" version="4.6"/>
+  <requires lib="libadwaita" version="1.1"/>
+  <object class="GtkWindow" id="MainWindow">
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="headerbar">
+        <child type="start">
+          <object class="GtkButton">
+            <property name="icon-name">list-add</property>
+          </object>
+        </child>
+        <child type="title">
+          <object class="AdwViewSwitcher"/>
+        </child>
+        <child type="end">
+          <object class="GtkButton" id="aboutBtn">
+            <property name="icon-name">open-menu-symbolic</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkButton">
+            <property name="icon-name">object-select-symbolic</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkButton">
+            <property name="icon-name">search</property>
+          </object>
+        </child>
       </object>
     </child>
+    <child>
+      <object class="GtkGrid">
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <child>
+          <object class="GtkSpinner">
+            <property name="halign">center</property>
+            <property name="spinning">True</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="column-span">1</property>
+              <property name="row">0</property>
+              <property name="row-span">1</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAboutDialog" id="aboutMenu">
+    <property name="comments">A simple Todo app</property>
+    <property name="copyright">Daniel Pavela</property>
+    <property name="default-width">7</property>
+    <property name="license">MIT License
+
+Copyright (c) 2022 Daniel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+</property>
+    <property name="license-type">mit-x11</property>
+    <property name="logo-icon-name">gnome-todo</property>
+    <property name="program-name">Todo</property>
+    <property name="version">v0.1</property>
+    <property name="website">https://github.com/daniel071/todo</property>
+    <property name="wrap-license">True</property>
   </object>
 </interface>
