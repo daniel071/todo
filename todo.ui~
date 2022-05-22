@@ -85,6 +85,10 @@ SOFTWARE.
         <property name="can-focus">False</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
         <child>
           <object class="GtkButtonBox">
             <property name="visible">True</property>
@@ -113,6 +117,9 @@ SOFTWARE.
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="halign">center</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -127,6 +134,9 @@ SOFTWARE.
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="halign">center</property>
+                <style>
+                  <class name="destructive-action"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -242,6 +252,9 @@ SOFTWARE.
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <signal name="clicked" handler="onAddTaskBtnClicked" swapped="no"/>
+            <style>
+              <class name="suggested-action"/>
+            </style>
           </object>
           <packing>
             <property name="pack-type">end</property>
@@ -273,23 +286,17 @@ SOFTWARE.
   </object>
   <object class="GtkListStore" id="taskListStore">
     <columns>
+      <!-- column-name Completed -->
+      <column type="GtkCellRendererToggle"/>
       <!-- column-name Task -->
       <column type="gchararray"/>
       <!-- column-name Description -->
       <column type="gchararray"/>
-      <!-- column-name Due Date -->
+      <!-- column-name Due -->
       <column type="gchararray"/>
-      <!-- column-name Task priority -->
+      <!-- column-name Priority -->
       <column type="gint"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">arson</col>
-        <col id="1" translatable="yes">yes</col>
-        <col id="2" translatable="yes">2022/3/2</col>
-        <col id="3">1</col>
-      </row>
-    </data>
   </object>
   <object class="GtkWindow" id="MainWindow">
     <property name="can-focus">False</property>
