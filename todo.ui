@@ -284,23 +284,6 @@ SOFTWARE.
     <property name="can-focus">False</property>
     <property name="icon-name">search</property>
   </object>
-  <object class="GtkListStore" id="taskListStore">
-    <columns>
-      <!-- column-name Completed -->
-      <column type="GtkCellRendererToggle"/>
-      <!-- column-name Task -->
-      <column type="gchararray"/>
-      <!-- column-name Description -->
-      <column type="gchararray"/>
-      <!-- column-name Due -->
-      <column type="gchararray"/>
-      <!-- column-name Priority -->
-      <column type="gint"/>
-    </columns>
-  </object>
-  <object class="GtkTreeModelFilter" id="taskListFilter">
-    <property name="child-model">taskListStore</property>
-  </object>
   <object class="GtkWindow" id="MainWindow">
     <property name="can-focus">False</property>
     <child>
@@ -332,15 +315,23 @@ SOFTWARE.
           </packing>
         </child>
         <child>
-          <object class="GtkTreeView" id="taskTreeView">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="model">taskListFilter</property>
-            <property name="enable-tree-lines">True</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection"/>
+            <property name="shadow-type">in</property>
+            <property name="propagate-natural-width">True</property>
+            <child>
+              <object class="GtkTreeView" id="taskTreeView">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">taskListFilter</property>
+                <property name="search-column">1</property>
+                <property name="enable-tree-lines">True</property>
+              </object>
             </child>
           </object>
           <packing>
@@ -504,5 +495,22 @@ SOFTWARE.
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="taskListStore">
+    <columns>
+      <!-- column-name Completed -->
+      <column type="GtkCellRendererToggle"/>
+      <!-- column-name Task -->
+      <column type="gchararray"/>
+      <!-- column-name Description -->
+      <column type="gchararray"/>
+      <!-- column-name Due -->
+      <column type="gchararray"/>
+      <!-- column-name Priority -->
+      <column type="gint"/>
+    </columns>
+  </object>
+  <object class="GtkTreeModelFilter" id="taskListFilter">
+    <property name="child-model">taskListStore</property>
   </object>
 </interface>
