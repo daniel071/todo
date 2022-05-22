@@ -319,6 +319,7 @@ SOFTWARE.
                 <property name="primary-icon-name">edit-find-symbolic</property>
                 <property name="primary-icon-activatable">False</property>
                 <property name="primary-icon-sensitive">False</property>
+                <signal name="search-changed" handler="onSearchEntryChanged" swapped="no"/>
               </object>
             </child>
           </object>
@@ -500,5 +501,8 @@ SOFTWARE.
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkTreeModelFilter" id="taskListFilter">
+    <property name="child-model">taskListStore</property>
   </object>
 </interface>

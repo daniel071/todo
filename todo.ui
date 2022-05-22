@@ -298,6 +298,9 @@ SOFTWARE.
       <column type="gint"/>
     </columns>
   </object>
+  <object class="GtkTreeModelFilter" id="taskListFilter">
+    <property name="child-model">taskListStore</property>
+  </object>
   <object class="GtkWindow" id="MainWindow">
     <property name="can-focus">False</property>
     <child>
@@ -319,6 +322,7 @@ SOFTWARE.
                 <property name="primary-icon-name">edit-find-symbolic</property>
                 <property name="primary-icon-activatable">False</property>
                 <property name="primary-icon-sensitive">False</property>
+                <signal name="search-changed" handler="onSearchEntryChanged" swapped="no"/>
               </object>
             </child>
           </object>
@@ -333,7 +337,7 @@ SOFTWARE.
             <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="model">taskListStore</property>
+            <property name="model">taskListFilter</property>
             <property name="enable-tree-lines">True</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection"/>

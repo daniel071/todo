@@ -4,6 +4,23 @@ from datetime import datetime
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+def matchFunc(taskListStore, iterr, data=None):
+    searchEntry = builder.get_object("searchEntry")
+    query = searchEntry.get_text()
+    value = taskListStore.get_value(iterr, 1)
+
+
+    if query == "":
+        return True
+    elif query in value.lower():
+        return True
+    return False
+
+def onEntryRefilter():
+    taskListFilter = builder.get_object("taskListFilter")
+    taskListFilter.refilter()
+
+
 def onTreeViewToggled(cell, path, taskListStore, *ignore):
     row = taskListStore.get_iter(path)
 
@@ -18,8 +35,14 @@ def onTreeViewToggled(cell, path, taskListStore, *ignore):
     #     model[it][0].set_active(True)
 
 def renderTreeView():
+    searchEntry = builder.get_object("searchEntry")
     taskTreeView = builder.get_object("taskTreeView")
     taskListStore = builder.get_object("taskListStore")
+
+    taskTreeView.set_search_entry(searchEntry)
+
+    taskListFilter = builder.get_object("taskListFilter")
+    taskListFilter.set_visible_func(matchFunc)
 
     names = ('Completed', 'Task', 'Description', 'Due Date', 'Task priority')
     for i in range(1):
@@ -98,6 +121,11 @@ class Handler:
             openBtn.set_active(True)
         elif toggleState == True:
             openBtn.set_active(False)
+
+    def onSearchEntryChanged(self, entry):
+        #searchQuery = entry.get_text()
+        onEntryRefilter()
+
 
 builder = Gtk.Builder()
 builder.add_from_file("todo.ui")
