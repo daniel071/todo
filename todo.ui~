@@ -5,9 +5,11 @@
   <object class="GtkAboutDialog" id="aboutDialog">
     <property name="can-focus">False</property>
     <property name="type-hint">dialog</property>
+    <property name="deletable">False</property>
     <property name="program-name">Todo</property>
     <property name="version">v0.1</property>
     <property name="copyright" translatable="yes">Daniel Pavela</property>
+    <property name="comments" translatable="yes">A simple Todo application.</property>
     <property name="website">https://github.com/daniel071/todo</property>
     <property name="license" translatable="yes">MIT License
 
@@ -48,7 +50,17 @@ SOFTWARE.
               <placeholder/>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="aboutCloseBtn">
+                <property name="label" translatable="yes">Close</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -80,7 +92,7 @@ SOFTWARE.
             <property name="valign">center</property>
             <property name="layout-style">start</property>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="priorityBtn1">
                 <property name="label" translatable="yes">Normal</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -94,7 +106,7 @@ SOFTWARE.
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="priorityBtn2">
                 <property name="label" translatable="yes">Important</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -108,7 +120,7 @@ SOFTWARE.
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="priorityBtn3">
                 <property name="label" translatable="yes">Urgent</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -148,7 +160,7 @@ SOFTWARE.
             <property name="halign">baseline</property>
             <property name="valign">center</property>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="dateEntry">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
@@ -161,7 +173,7 @@ SOFTWARE.
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="todayBtn">
                 <property name="label" translatable="yes">Today</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -184,7 +196,7 @@ SOFTWARE.
           </packing>
         </child>
         <child>
-          <object class="GtkEntry">
+          <object class="GtkEntry" id="nameEntry">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="placeholder-text" translatable="yes">Task name</property>
@@ -195,7 +207,7 @@ SOFTWARE.
           </packing>
         </child>
         <child>
-          <object class="GtkEntry">
+          <object class="GtkEntry" id="descriptionEntry">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="placeholder-text" translatable="yes">Task Description</property>
@@ -212,7 +224,6 @@ SOFTWARE.
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="title" translatable="yes">Add a new task</property>
-        <property name="show-close-button">True</property>
         <child>
           <object class="GtkButton" id="cancelTaskBtn">
             <property name="label" translatable="yes">Cancel</property>
@@ -271,7 +282,6 @@ SOFTWARE.
           <object class="GtkSearchBar" id="searchBar">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="search-mode-enabled">True</property>
             <property name="show-close-button">True</property>
             <child>
               <object class="GtkSearchEntry" id="searchEntry">
@@ -289,10 +299,9 @@ SOFTWARE.
           </packing>
         </child>
         <child>
-          <object class="GtkSpinner">
+          <object class="GtkListBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="active">True</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -352,6 +361,105 @@ SOFTWARE.
           <packing>
             <property name="pack-type">end</property>
             <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="homogeneous">True</property>
+            <child>
+              <object class="GtkToggleButton" id="openBtn">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="active">True</property>
+                <signal name="toggled" handler="onOpenBtnToggled" swapped="no"/>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="homogeneous">True</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="icon-name">checkbox-symbolic</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">Open</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="closedBtn">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <signal name="toggled" handler="onClosedBtnToggled" swapped="no"/>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="homogeneous">True</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="icon-name">checkbox-checked-symbolic</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">Closed</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>
