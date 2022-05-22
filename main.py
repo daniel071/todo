@@ -1,44 +1,41 @@
-import sys
 import gi
-gi.require_version('Gtk', '4.0')
-gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw
 
-@Gtk.Template.from_file("/home/daniel/code/todo/todo.ui")
-class headerbar(Gtk.HeaderBar):
-    __gtype_name__ = "headerbar"
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk
 
-    aboutBtn = Gtk.Template.Child("aboutBtn")
-    print(aboutBtn)
 
-    @Gtk.Template.Callback("aboutBtn_button_clicked")
-    def aboutBtn_button_clicked(self, *args):
-        print("Hello!")
+class Handler:
+    def onDestroy(self, *args):
+        Gtk.main_quit()
 
-class MainWindow(Gtk.ApplicationWindow):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def onMenuBtnClicked(self, button):
+        aboutDialog = builder.get_object("aboutDialog")
+        aboutDialog.show_all()
 
-class MyApp(Adw.Application):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.connect('activate', self.on_activate)
+    def onSearchBtnToggled(self, button):
+        toggleState = button.get_active()
+        searchBar = builder.get_object("searchBar")
+        searchBar.set_search_mode(toggleState)
 
-    def on_activate(self, app):
-        self.win = MainWindow(application=app) or headerbar(application=self)
+    def onAddBtnClicked(self, button):
+        addDialog = builder.get_object("addDialog")
+        addDialog.show_all()
 
-        builder = Gtk.Builder()
-        builder.set_current_object(self)
-        builder.add_from_file("/home/daniel/code/todo/todo.ui")
-        print(builder.get_objects())
-        #
-        # handlers = {
-        #     "onButtonPressed": onButtonPressed
-        # }
-        #builder.connect_signals(handlers)
+    def onCancelTaskBtnClicked(self, button):
+        addDialog = builder.get_object("addDialog")
+        addDialog.close()
 
-        window = builder.get_object("MainWindow")
-        window.present()
+    def onAddTaskBtnClicked(self, button):
+        addDialog = builder.get_object("addDialog")
+        addDialog.close()
 
-app = MyApp(application_id="com.example.GtkApplication")
-app.run(sys.argv)
+
+
+builder = Gtk.Builder()
+builder.add_from_file("todo.ui")
+builder.connect_signals(Handler())
+
+window = builder.get_object("MainWindow")
+window.show_all()
+
+Gtk.main()

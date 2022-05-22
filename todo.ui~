@@ -212,6 +212,7 @@ SOFTWARE.
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="title" translatable="yes">Add a new task</property>
+        <property name="show-close-button">True</property>
         <child>
           <object class="GtkButton" id="cancelTaskBtn">
             <property name="label" translatable="yes">Cancel</property>
@@ -270,6 +271,7 @@ SOFTWARE.
           <object class="GtkSearchBar" id="searchBar">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="search-mode-enabled">True</property>
             <property name="show-close-button">True</property>
             <child>
               <object class="GtkSearchEntry" id="searchEntry">
