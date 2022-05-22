@@ -183,6 +183,7 @@ SOFTWARE.
                 <property name="margin-start">10</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
+                <signal name="clicked" handler="onTodayBtnClicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -270,6 +271,18 @@ SOFTWARE.
     <property name="can-focus">False</property>
     <property name="icon-name">search</property>
   </object>
+  <object class="GtkListStore" id="taskListStore">
+    <columns>
+      <!-- column-name Task -->
+      <column type="gchararray"/>
+      <!-- column-name Description -->
+      <column type="gchararray"/>
+      <!-- column-name Due Date -->
+      <column type="gchararray"/>
+      <!-- column-name Task priority -->
+      <column type="gint"/>
+    </columns>
+  </object>
   <object class="GtkWindow" id="MainWindow">
     <property name="can-focus">False</property>
     <child>
@@ -300,9 +313,16 @@ SOFTWARE.
           </packing>
         </child>
         <child>
-          <object class="GtkListBox">
+          <object class="GtkTreeView" id="taskTreeView">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="model">taskListStore</property>
+            <property name="enable-tree-lines">True</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection"/>
+            </child>
           </object>
           <packing>
             <property name="left-attach">0</property>

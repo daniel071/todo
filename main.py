@@ -3,6 +3,13 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+def renderTreeView():
+    taskTreeView = builder.get_object("taskTreeView")
+    names = ('Task', 'Description', 'Due Date', 'Task priority')
+    for i in range(4):
+        renderer_text = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn(names[i], renderer_text, text=i)
+        taskTreeView.append_column(column)
 
 class Handler:
     def onDestroy(self, *args):
@@ -25,13 +32,30 @@ class Handler:
         addDialog = builder.get_object("addDialog")
         addDialog.show_all()
 
+    def onTodayBtnClicked(self, button):
+        dateEntry = builder.get_object("dateEntry")
+        dateEntry.set_text("Today")
+
     def onCancelTaskBtnClicked(self, button):
         addDialog = builder.get_object("addDialog")
         addDialog.hide()
 
     def onAddTaskBtnClicked(self, button):
         addDialog = builder.get_object("addDialog")
+        dateEntry = builder.get_object("dateEntry")
+        nameEntry = builder.get_object("nameEntry")
+        descriptionEntry = builder.get_object("descriptionEntry")
+        taskListStore = builder.get_object("taskListStore")
+        taskTreeView = builder.get_object("taskTreeView")
+
+        taskDate = dateEntry.get_text()
+        taskName = nameEntry.get_text()
+        taskDescription = descriptionEntry.get_text()
+
+        taskListStore.append([taskName, taskDescription, taskDate, 1])
+        taskTreeView.show_all()
         addDialog.hide()
+
 
     def onOpenBtnToggled(self, button):
         toggleState = button.get_active()
@@ -57,5 +81,7 @@ builder.connect_signals(Handler())
 
 window = builder.get_object("MainWindow")
 window.show_all()
+
+renderTreeView()
 
 Gtk.main()
