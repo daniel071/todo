@@ -8,12 +8,13 @@
 # - The format of the display should include the due date and then a space followed by a description of the task.
 # - Each task must appear on a separate line of the final display field.
 
-# Solution requirements NOT implemented (Task 2)
+# Solution requirements implemented (Task 2)
 # - When a task is entered where the due date is prior to the current date the task and due date must display “Overdue”.
 # - When a task is entered where the due date is the current date the task and due date must display “Due Today”.
 # - When a task is entered where the due date after the current date the task and due date must display “Due After Today”.
 # - A count of the total number of tasks should be displayed at the end of the program.
-# (Task 3)
+
+# Solution requirements NOT implemented (Task 3)
 # - When a task is stored it must be appended to a file called tasks in the local directory, where the program executable is stored.
 # - When the program starts the read only fields of previous tasks must be populated based on the contents on the tasks file.
 # - The tasks must be classified into the relevant read only field based on the due date recorded in the file, relative to the current date.
@@ -21,8 +22,7 @@
 
 # Necessary dependencies for the program to run
 import gi
-from datetime import datetime
-
+from datetime import datetime, timedelta
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
@@ -33,6 +33,15 @@ from gi.repository import Gtk
 # 3: Urgent priority
 
 taskPriority = 0
+
+# Required to keep the task count label up-to-date and match Task 2 requirements.
+def updateTaskCount():
+    # Get required objects
+    taskListStore = builder.get_object("taskListStore")
+    taskCountLabel = builder.get_object("taskCountLabel")
+
+    # Set the text of the task count label to the number of tasks in the list.
+    taskCountLabel.set_text(str(taskListStore.iter_n_children()))
 
 # Function that uses search query from search entry and filters the main
 # list of tasks that only matches the query.
@@ -76,6 +85,27 @@ def formatFunc(col, renderer_text, taskListStore, titer, data):
         renderer_text.set_property("foreground", "red")
         renderer_text.set_property("weight", 700)
 
+# Text formatting for task 2: Managing tasks based on what time they are due
+def dueDateFormatFunc(col, renderer_text, taskListStore, titer, data):
+    # Get sixth row (0, 1, 2, 3, 4, 5), which is upcoming due dates.
+    val = taskListStore.get_value(titer, 5)
+
+    # Set text colour and bold for each value.
+    if val == "Due later":
+        renderer_text.set_property("foreground", "lightgray")
+        renderer_text.set_property("weight", 300)
+
+    elif val == "Due tomorrow":
+        renderer_text.set_property("foreground", "white")
+        renderer_text.set_property("weight", 400)
+
+    elif val == "Due today":
+        renderer_text.set_property("foreground", "orange")
+        renderer_text.set_property("weight", 600)
+
+    elif val == "Overdue":
+        renderer_text.set_property("foreground", "red")
+        renderer_text.set_property("weight", 700)
 
 # Required to keep the task list up-to-date
 def onEntryRefilter():
@@ -97,6 +127,9 @@ def onTreeViewToggled(cell, path, taskListStore, *ignore):
     # Update task list.
     taskTreeView.show_all()
 
+    # Required to keep the task count label up-to-date and match Task 2 requirements.
+    updateTaskCount()
+
 # Render the main list of tasks.
 def renderTreeView():
     # Get all objects necessary.
@@ -114,7 +147,7 @@ def renderTreeView():
     taskListFilter.set_visible_func(matchFunc)
 
     # Specify the titles of each column
-    names = ('Completed', 'Task', 'Description', 'Due Date', 'Task priority')
+    names = ('Completed', 'Task', 'Description', 'Due Date', 'Task priority', 'Upcoming')
 
     # Range from index 0 to 0
     for i in range(1):
@@ -153,6 +186,20 @@ def renderTreeView():
         # Add it as a new column
         column = Gtk.TreeViewColumn(names[i], renderer_text, text=i)
         column.set_cell_data_func(renderer_text, formatFunc)
+        taskTreeView.append_column(column)
+
+    # Range from index 6 to 6
+    for i in range(5, 6):
+        # Create a new CellRendererText object
+        renderer_text = Gtk.CellRendererText()
+
+        # Allow text to be formatted
+        renderer_text.set_property("weight_set", True)
+        renderer_text.set_property("foreground_set", True)
+
+        # Add it as a new column
+        column = Gtk.TreeViewColumn(names[i], renderer_text, text=i)
+        column.set_cell_data_func(renderer_text, dueDateFormatFunc)
         taskTreeView.append_column(column)
 
 # --- MAIN HANDLER CLASS ---
@@ -234,12 +281,31 @@ class Handler:
         elif taskPriority == 3:
             priorityText = "Urgent"
 
+        # Find out when task is due and display it as text
+        # Get date in YYYY-MM-DD format.
+        today = datetime.today().date()
+        tomorrow = datetime.today().date() + timedelta(days=1)
+        taskDateTime = datetime.strptime(taskDate, "%Y-%m-%d").date()
+
+        # Compare dates and convert it into text to enter to the list.
+        if taskDateTime > tomorrow:
+            upcomingText = "Due later"
+
+        elif taskDateTime == tomorrow:
+            upcomingText = "Due tomorrow"
+
+        elif taskDateTime == today:
+            upcomingText = "Due today"
+
+        elif taskDateTime < today:
+            upcomingText = "Overdue"
+
         # Add this in the list of tasks, stored in a Gtk.ListStore object,
         # which is displayed in Gtk.TreeView object.
         # Names are the following:
-        # 'Completed', 'Task', 'Description', 'Due Date', 'Task priority'
+        # 'Completed', 'Task', 'Description', 'Due Date', 'Task priority', 'Upcoming'
 
-        taskListStore.append([Gtk.CellRendererToggle(), taskName, taskDescription, taskDate, priorityText])
+        taskListStore.append([Gtk.CellRendererToggle(), taskName, taskDescription, taskDate, priorityText, upcomingText])
 
         # Required to keep the task list up-to-date
         taskTreeView.show_all()
@@ -249,6 +315,9 @@ class Handler:
 
         # Reset taskPriority back to zero, as this task has already been added.
         taskPriority = 0
+
+        # Required to keep the task count label up-to-date and match Task 2 requirements.
+        updateTaskCount()
 
     # When the "Open" tasks button in the main window is pressed:
     def onOpenBtnToggled(self, button):
