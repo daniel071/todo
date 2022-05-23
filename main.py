@@ -26,6 +26,14 @@ from datetime import datetime
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+# Used to manage the priority of tasks, and allow the user to change it.
+# 0: Not specified
+# 1: Normal priority
+# 2: Important priority
+# 3: Urgent priority
+
+taskPriority = 0
+
 # Function that uses search query from search entry and filters the main
 # list of tasks that only matches the query.
 def matchFunc(taskListStore, iterr, data=None):
@@ -44,6 +52,30 @@ def matchFunc(taskListStore, iterr, data=None):
     elif query in value.lower():
         return True
     return False
+
+# Handle formatting for priority text. e.g. "Urgent" is bold red to highlight
+# it's importance
+def formatFunc(col, renderer_text, taskListStore, titer, data):
+    # Get fifth row (0, 1, 2, 3, 4), which is task priority
+    val = taskListStore.get_value(titer, 4)
+
+    # Set text colour and bold for each value.
+    if val == "Unspecified":
+        renderer_text.set_property("foreground", "lightgray")
+        renderer_text.set_property("weight", 300)
+
+    elif val == "Normal":
+        renderer_text.set_property("foreground", "white")
+        renderer_text.set_property("weight", 400)
+
+    elif val == "Important":
+        renderer_text.set_property("foreground", "orange")
+        renderer_text.set_property("weight", 600)
+
+    elif val == "Urgent":
+        renderer_text.set_property("foreground", "red")
+        renderer_text.set_property("weight", 700)
+
 
 # Required to keep the task list up-to-date
 def onEntryRefilter():
@@ -96,12 +128,30 @@ def renderTreeView():
         column = Gtk.TreeViewColumn(names[i], toggle)
         taskTreeView.append_column(column)
 
-    # Range from index 1 to 6
-    for i in range(1, 5):
+    # Range from index 1 to 4
+    for i in range(1, 4):
         # Create a new CellRendererText object
         renderer_text = Gtk.CellRendererText()
+
+        # Make field editable by user
+        renderer_text.set_property("editable", True)
+
         # Add it as a new column
         column = Gtk.TreeViewColumn(names[i], renderer_text, text=i)
+        taskTreeView.append_column(column)
+
+    # Range from index 5 to 5
+    for i in range(4, 5):
+        # Create a new CellRendererText object
+        renderer_text = Gtk.CellRendererText()
+
+        # Allow text to be formatted
+        renderer_text.set_property("weight_set", True)
+        renderer_text.set_property("foreground_set", True)
+
+        # Add it as a new column
+        column = Gtk.TreeViewColumn(names[i], renderer_text, text=i)
+        column.set_cell_data_func(renderer_text, formatFunc)
         taskTreeView.append_column(column)
 
 # --- MAIN HANDLER CLASS ---
@@ -153,6 +203,10 @@ class Handler:
 
     # In the add task dialog, "Add" button is pressed.
     def onAddTaskBtnClicked(self, button):
+        # Used to prevent "UnboundLocalError: local variable 'taskPriority'
+        # referenced before assignment" error
+        global taskPriority
+
         # Get all required objects for this function:
         addDialog = builder.get_object("addDialog")
         dateEntry = builder.get_object("dateEntry")
@@ -166,18 +220,34 @@ class Handler:
         taskName = nameEntry.get_text()
         taskDescription = descriptionEntry.get_text()
 
+        # Convert priority numbers into text that can be displayed to the user.
+        if taskPriority == 0:
+            priorityText = "Unspecified"
+
+        elif taskPriority == 1:
+            priorityText = "Normal"
+
+        elif taskPriority == 2:
+            priorityText = "Important"
+
+        elif taskPriority == 3:
+            priorityText = "Urgent"
+
         # Add this in the list of tasks, stored in a Gtk.ListStore object,
         # which is displayed in Gtk.TreeView object.
         # Names are the following:
         # 'Completed', 'Task', 'Description', 'Due Date', 'Task priority'
 
-        taskListStore.append([Gtk.CellRendererToggle(), taskName, taskDescription, taskDate, 1])
+        taskListStore.append([Gtk.CellRendererToggle(), taskName, taskDescription, taskDate, priorityText])
 
         # Required to keep the task list up-to-date
         taskTreeView.show_all()
 
         # Close the add task dialog
         addDialog.hide()
+
+        # Reset taskPriority back to zero, as this task has already been added.
+        taskPriority = 0
 
     # When the "Open" tasks button in the main window is pressed:
     def onOpenBtnToggled(self, button):
@@ -208,6 +278,37 @@ class Handler:
     # Required to keep task list up-to-date
     def onSearchEntryChanged(self, entry):
         onEntryRefilter()
+
+    # Set the priority buttons in the add task dialog to set taskPriorty
+    # 0: Not specified
+    # 1: Normal priority
+    # 2: Important priority
+    # 3: Urgent priority
+
+    def onPriorityBtn1Clicked(self, button):
+        # Used to prevent "UnboundLocalError: local variable 'taskPriority'
+        # referenced before assignment" error
+        global taskPriority
+
+        # Set the taskPriority to be later added in the ListStore field.
+        taskPriority = 1
+
+    def onPriorityBtn2Clicked(self, button):
+        # Used to prevent "UnboundLocalError: local variable 'taskPriority'
+        # referenced before assignment" error
+        global taskPriority
+
+        # Set the taskPriority to be later added in the ListStore field.
+        taskPriority = 2
+
+    def onPriorityBtn3Clicked(self, button):
+        # Used to prevent "UnboundLocalError: local variable 'taskPriority'
+        # referenced before assignment" error
+        global taskPriority
+
+        # Set the taskPriority to be later added in the ListStore field.
+        taskPriority = 3
+
 
 # Load UI elements from a file. Program "Glade" used to design program.
 builder = Gtk.Builder()
