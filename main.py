@@ -392,6 +392,10 @@ window = builder.get_object("MainWindow")
 
 # Display the window object
 window.show_all()
+window.set_icon_name("gnome-todo")
+window.set_title("Todo")
+
+
 
 # Once the window is shown, the lists of tasks are called here to be rendered.
 renderTreeView()

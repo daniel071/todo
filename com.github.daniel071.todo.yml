@@ -1,0 +1,14 @@
+app-id: com.github.daniel071.todo
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+command: main.py
+modules:
+  - name: todo
+    buildsystem: simple
+    build-commands:
+      - install -D main.py /app/bin/main.py
+      - install -D todo.ui /app/bin/todo.ui
+    sources:
+      - type: file
+        path: main.py
